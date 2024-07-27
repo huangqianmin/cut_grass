@@ -3,11 +3,11 @@ extends CharacterBody2D
 const MAX_SPEED = 40
 
 @onready var health_component: HealthComponent = $Components/HealthComponent
-@onready var area_2d: Area2D = $Area2D
+@onready var hurtbox_component: HurtboxComponent = $HurtboxComponent
 
 func _ready() -> void:
 	add_to_group("enemy")
-	area_2d.area_entered.connect(on_area_entered)
+	hurtbox_component.health_component = health_component
 
 
 func _process(delta: float) -> void:
@@ -25,6 +25,3 @@ func get_direction_player() -> Vector2:
 		
 	return Vector2.ZERO
 		
-
-func on_area_entered(body: Area2D):
-	health_component.damage(100)

@@ -4,6 +4,7 @@ const MAX_RANGE := 150.0
 
 @export var sword_ability: PackedScene
 @onready var timer: Timer = $Timer
+var damage := 5
 
 func _ready() -> void:
 	timer.timeout.connect(on_timer_timeout)
@@ -32,8 +33,10 @@ func on_timer_timeout() -> void:
 		return distance_a < distance_b
 	)
 	
-	var sword_instance = sword_ability.instantiate() as Node2D
+	var sword_instance = sword_ability.instantiate() as SwordAbility
 	player.get_parent().add_child(sword_instance)
+	sword_instance.set_sword_damage(damage)
+	
 	sword_instance.global_position = enemies[0].global_position
 	var offset = Vector2.RIGHT.rotated(randf_range(0.0, TAU))
 	sword_instance.global_position += offset
