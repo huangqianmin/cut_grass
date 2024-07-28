@@ -22,11 +22,6 @@ func on_timer_timeout() -> void:
 	if enemies.is_empty():
 		return
 	
-	print("[enemy] %d %s" %[
-		enemies.size(),
-		enemies[0].name
-	])
-	
 	enemies.sort_custom(func(a: Node2D, b: Node2D):
 		var distance_a = a.global_position.distance_squared_to(player.global_position)
 		var distance_b = b.global_position.distance_squared_to(player.global_position)
