@@ -39,11 +39,10 @@ shape = SubResource("CircleShape2D_e5frw")
 position = Vector2(0, -8)
 texture = ExtResource("1_j2l3u")
 
-[node name="HurtboxComponent" type="Area2D" parent="." node_paths=PackedStringArray("health_component")]
+[node name="HurtboxComponent" type="Area2D" parent="."]
 collision_layer = 0
 collision_mask = 8
 script = ExtResource("5_hnyvj")
-health_component = NodePath("../HealthComponent")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
 position = Vector2(0, -7)
@@ -52,7 +51,3 @@ shape = SubResource("CircleShape2D_bnhwh")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -5)
 shape = SubResource("CircleShape2D_kiud4")
-
-[node name="DamageIntervalTimer" type="Timer" parent="."]
-wait_time = 0.5
-one_shot = true

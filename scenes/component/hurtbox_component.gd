@@ -4,15 +4,19 @@ extends Area2D
 @export var health_component: HealthComponent
 
 func _ready() -> void:
-	area_entered.connect(on_area_entered)
-	
+	area_entered.connect(_on_area_entered)
 
-func on_area_entered(other_area: Area2D):
-	if not other_area is HitboxComponent:
-		return
-	
+
+func create_damage(damage_number: int):
 	if health_component == null:
 		return
 		
+	health_component.damage(damage_number)
+	
+
+func _on_area_entered(other_area: Area2D):
+	if not other_area is HitboxComponent:
+		return
+	
 	var hitbox_component = other_area as HitboxComponent
-	health_component.damage(hitbox_component.damage)
+	create_damage(hitbox_component.damage)
