@@ -11,11 +11,11 @@ var base_wait_time
 
 func _ready() -> void:
 	base_wait_time = timer.wait_time
-	timer.timeout.connect(on_timer_timeout)
+	timer.timeout.connect(_on_timer_timeout)
 	GameEvenets.ability_upgrade_added.connect(_on_ability_upgrade_added)
 	
 	
-func on_timer_timeout() -> void:
+func _on_timer_timeout() -> void:
 	var player = get_tree().get_first_node_in_group("player") as Node2D
 	if player == null:
 		return
@@ -38,7 +38,7 @@ func on_timer_timeout() -> void:
 	
 	var foreground_layer = get_tree().get_first_node_in_group("foreground_layer")
 	foreground_layer.add_child(sword_instance)
-	sword_instance.set_sword_damage(damage)
+	sword_instance.set_damage(damage)
 	
 	sword_instance.global_position = enemies[0].global_position
 	var offset = Vector2.RIGHT.rotated(randf_range(0.0, TAU))
@@ -46,6 +46,7 @@ func on_timer_timeout() -> void:
 	
 	var enemy_direction = enemies[0].global_position - sword_instance.global_position
 	sword_instance.global_rotation = enemy_direction.angle()
+	
 
 func _on_ability_upgrade_added(upgrade: AbilityUpgrade, current_upgrades: Dictionary):
 	if upgrade.id != "sword_rate":

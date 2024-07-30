@@ -15,20 +15,39 @@ func _ready() -> void:
 	
 	timer.start(SPAWN_INTERVAL)
 
+
+func get_spawn_position() -> Vector2:
+	var player = get_tree().get_first_node_in_group("player")
+	if player == null:
+		return Vector2.ZERO
+	
+	var spawn_position = Vector2.ZERO
+	var random_direction = Vector2.RIGHT.rotated(randf_range(0.0, TAU))
+	for i in 4:
+		spawn_position = player.global_position + random_direction * SPAWN_RADIUS
+	
+		#	射线检查，刷新点与人物连线穿过墙壁
+		var query = PhysicsRayQueryParameters2D.create(player.global_position, spawn_position, 1)
+		var result = get_tree().root.world_2d.direct_space_state.intersect_ray(query)
+		if result.is_empty():
+			break
+		else:
+			random_direction = random_direction.rotated(deg_to_rad(90.0))
+	
+	return spawn_position
+	
+	
 func on_timer_timeout() -> void:
 	
 	var player = get_tree().get_first_node_in_group("player")
 	if player == null:
 		return
-		
-	var random_direction = Vector2.RIGHT.rotated(randf_range(0.0, TAU))
-	var spawn_position = player.global_position + random_direction * SPAWN_RADIUS
 	
 	var enemy = basic_enemy_scene.instantiate() as Node2D
 	
 	var entities_layer = get_tree().get_first_node_in_group("entities_layer")
+	enemy.global_position = get_spawn_position()
 	entities_layer.add_child(enemy)
-	enemy.global_position = spawn_position
 
 
 func _on_arena_difficulty_increased(arena_difficulty: int) -> void:
