@@ -1,17 +1,22 @@
 extends Node
 
-const SPAWN_RADIUS = 350.0
+const SPAWN_RADIUS := 350.0
+const SPAWN_INTERVAL := 1
 
 @export var basic_enemy_scene: PackedScene
+@export var arena_manager: Node
 
 @onready var timer: Timer = $Timer
 
 
 func _ready() -> void:
 	timer.timeout.connect(on_timer_timeout)
-
+	arena_manager.arena_difficulty_increased.connect(_on_arena_difficulty_increased)
+	
+	timer.start(SPAWN_INTERVAL)
 
 func on_timer_timeout() -> void:
+	
 	var player = get_tree().get_first_node_in_group("player")
 	if player == null:
 		return
@@ -24,3 +29,10 @@ func on_timer_timeout() -> void:
 	var entities_layer = get_tree().get_first_node_in_group("entities_layer")
 	entities_layer.add_child(enemy)
 	enemy.global_position = spawn_position
+
+
+func _on_arena_difficulty_increased(arena_difficulty: int) -> void:
+	var time_off = (0.1 / 12) * arena_difficulty
+	
+	#	直接修改wait_time，当次计时周期不受影响
+	timer.wait_time = SPAWN_INTERVAL - time_off
